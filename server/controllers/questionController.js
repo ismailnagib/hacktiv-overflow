@@ -85,5 +85,25 @@ module.exports = {
         .catch(err => {
             res.status(500).json({message: err})
         })
+    },
+
+    upvote: function(req, res) {
+        Question.updateOne({
+            _id: req.body.id
+        }, {
+            $inc: {
+                vote: 1
+            }
+        })
+    },
+
+    downvote: function(req, res) {
+        Question.updateOne({
+            _id: req.body.id
+        }, {
+            $inc: {
+                vote: -1
+            }
+        })
     }
 }

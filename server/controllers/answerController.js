@@ -56,4 +56,24 @@ module.exports = {
             res.status(500).json({message: err})
         })
     },
+
+    upvote: function(req, res) {
+        Answer.updateOne({
+            _id: req.body.id
+        }, {
+            $inc: {
+                vote: 1
+            }
+        })
+    },
+
+    downvote: function(req, res) {
+        Answer.updateOne({
+            _id: req.body.id
+        }, {
+            $inc: {
+                vote: -1
+            }
+        })
+    }
 }

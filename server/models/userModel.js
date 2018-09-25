@@ -13,11 +13,7 @@ const userSchema = new Schema({
     password: {
         type: String,
         required: true
-    },
-    starred: [{
-        type: Schema.Types.ObjectId,
-        ref: 'Question'
-    }]
+    }
 }, {
   timestamps: true
 });

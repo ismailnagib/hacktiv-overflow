@@ -161,6 +161,8 @@ export default {
             } else {
               this.$store.dispatch(localStorage.getItem('openTab'))
             }
+            this.$store.commit('updateQuestionTitle', '')
+            this.$store.commit('updateQuestionDesc', '')
             this.$store.commit('openEditFalse')
           })
           .catch(err => {

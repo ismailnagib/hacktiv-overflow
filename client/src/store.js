@@ -20,7 +20,11 @@ export default new Vuex.Store({
     newanswer: '',
     editanswer: '',
     openEditAnswer: false,
-    editAnswerId: ''
+    editAnswerId: '',
+    byVote: 'orange',
+    byDate: 'black',
+    mine: 'black',
+    openModal: false
   },
   mutations: {
     login (state) {
@@ -68,6 +72,12 @@ export default new Vuex.Store({
     openEditAnswerFalse (state) {
       state.openEditAnswer = false
     },
+    openModalTrue (state) {
+      state.openModal = true
+    },
+    openModalFalse (state) {
+      state.openModal = false
+    },
     updateQuestionTitle (state, value) {
       state.questiontitle = value
     },
@@ -88,6 +98,15 @@ export default new Vuex.Store({
     },
     updateEditAnswerId (state, value) {
       state.editAnswerId = value
+    },
+    updateByVote (state, value) {
+      state.byVote = value
+    },
+    updateByDate (state, value) {
+      state.byDate = value
+    },
+    updateMine (state, value) {
+      state.mine = value
     }
   },
   actions: {
@@ -98,6 +117,9 @@ export default new Vuex.Store({
       })
         .then(data => {
           context.commit('changeQuestions', data.data.data)
+          context.commit('updateByVote', 'orange')
+          context.commit('updateByDate', 'black')
+          context.commit('updateMine', 'black')
         })
         .catch(err => {
           console.log(err)
@@ -110,6 +132,9 @@ export default new Vuex.Store({
       })
         .then(data => {
           context.commit('changeQuestions', data.data.data)
+          context.commit('updateByVote', 'black')
+          context.commit('updateByDate', 'orange')
+          context.commit('updateMine', 'black')
         })
         .catch(err => {
           console.log(err)
@@ -128,19 +153,9 @@ export default new Vuex.Store({
               context.commit('pushQuestion', datum)
             }
           })
-        })
-        .catch(err => {
-          console.log(err)
-        })
-    },
-    starredQ: function (context) {
-      axios({
-        method: 'post',
-        url: 'http://localhost:3000/users',
-        data: { token: localStorage.getItem('jwtToken') }
-      })
-        .then(data => {
-          context.commit('changeQuestions', data.data.data.starred)
+          context.commit('updateByVote', 'black')
+          context.commit('updateByDate', 'black')
+          context.commit('updateMine', 'orange')
         })
         .catch(err => {
           console.log(err)

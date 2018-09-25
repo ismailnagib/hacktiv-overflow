@@ -18,70 +18,38 @@
     <button class='menubtn' v-on:click='mostVotedQ()' v-bind:style='({color: byVote})'>Most Voted Questions</button><br><br>
     <button class='menubtn' v-on:click='mostRecentQ()' v-bind:style='({color: byDate})'>Most Recent Questions</button><br><br>
     <button class='menubtn' v-on:click='myQ()' v-bind:style='({color: mine})' v-if='islogin'>My Questions</button><br><br>
-    <button class='menubtn' v-on:click='starredQ()' v-bind:style='({color: starred})' v-if='islogin'>Starred Questions</button>
   </div>
 </template>
 
 <script>
 import axios from 'axios'
 import store from '@/store'
+import { mapState } from 'vuex'
 
 export default {
   name: 'menulist',
   store,
-  data: function () {
-    return {
-      byVote: 'orange',
-      byDate: 'black',
-      mine: 'black',
-      starred: 'black',
-      openModal: false,
-      questiontitle: '',
-      questiondesc: ''
-    }
-  },
   methods: {
     mostVotedQ: function () {
-      this.byVote = 'orange'
-      this.byDate = 'black'
-      this.mine = 'black'
-      this.starred = 'black'
       this.$store.dispatch('mostVotedQ')
       localStorage.setItem('openTab', 'mostVotedQ')
       this.$router.push({ path: '/' })
     },
     mostRecentQ: function () {
-      this.byVote = 'black'
-      this.byDate = 'orange'
-      this.mine = 'black'
-      this.starred = 'black'
       this.$store.dispatch('mostRecentQ')
       localStorage.setItem('openTab', 'mostRecentQ')
       this.$router.push({ path: '/' })
     },
     myQ: function () {
-      this.byVote = 'black'
-      this.byDate = 'black'
-      this.mine = 'orange'
-      this.starred = 'black'
       this.$store.dispatch('myQ')
       localStorage.setItem('openTab', 'myQ')
       this.$router.push({ path: '/' })
     },
-    starredQ: function () {
-      this.byVote = 'black'
-      this.byDate = 'black'
-      this.mine = 'black'
-      this.starred = 'orange'
-      this.$store.dispatch('starredQ')
-      localStorage.setItem('openTab', 'starredQ')
-      this.$router.push({ path: '/' })
-    },
     toggleModal: function () {
-      if (this.openModal === true) {
-        this.openModal = false
+      if (this.openModal) {
+        this.$store.commit('openModalFalse')
       } else {
-        this.openModal = true
+        this.$store.commit('openModalTrue')
       }
     },
     addQuestion: function () {
@@ -93,9 +61,9 @@ export default {
         .then(data => {
           this.myQ()
           this.$router.push({ path: `/${data.data.data._id}` })
-          this.toggleModal()
-          this.questiontitle = ''
-          this.questiondesc = ''
+          this.$store.commit('openModalFalse')
+          this.$store.commit('updateQuestionTitle', '')
+          this.$store.commit('updateQuestionDesc', '')
         })
         .catch(err => {
           console.log(err)
@@ -103,11 +71,22 @@ export default {
     }
   },
   computed: {
-    islogin () {
-      return this.$store.state.islogin
+    ...mapState(['islogin', 'byVote', 'byDate', 'mine', 'openModal']),
+    questiontitle: {
+      get () {
+        return this.$store.state.questiontitle
+      },
+      set (value) {
+        this.$store.commit('updateQuestionTitle', value)
+      }
     },
-    afterlogout () {
-      return this.$store.state.afterlogout
+    questiondesc: {
+      get () {
+        return this.$store.state.questiondesc
+      },
+      set (value) {
+        this.$store.commit('updateQuestionDesc', value)
+      }
     }
   },
   created () {

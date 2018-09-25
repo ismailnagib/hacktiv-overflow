@@ -382,7 +382,7 @@ export default {
   }
   #answerbox button {
     color: white;
-    background-color: #42b983;
+    background-color: orange;
     font-weight: bold;
   }
   #answerbox h5 {
@@ -390,7 +390,7 @@ export default {
     margin-left: 10px;
   }
   #answerbox h5:hover {
-    color: #42b983
+    color: orange
   }
   #answerbox textarea{
     width: 98%;
@@ -419,7 +419,7 @@ export default {
   }
   .voteBtn {
     background-color: white;
-    color: #42b983;
+    color: orange;
   }
   .haventVote {
     color: black;

@@ -27,7 +27,7 @@ export default {
       notice: 'placeholder',
       noticeColor: 'white',
       isregistering: false,
-      loginColor: '#42b983',
+      loginColor: 'orange',
       registerColor: 'black'
     }
   },
@@ -37,7 +37,7 @@ export default {
         this.isregistering = false
         this.noticeColor = 'white'
         this.notice = 'placeholder'
-        this.loginColor = '#42b983'
+        this.loginColor = 'orange'
         this.registerColor = 'black'
       } else {
         axios({
@@ -95,7 +95,7 @@ export default {
             this.notice = "Registration successful. You can enjoy the the web's full feature now by logging in."
             this.noticeColor = 'green'
             this.isregistering = false
-            this.loginColor = '#42b983'
+            this.loginColor = 'orange'
             this.registerColor = 'black'
           })
           .catch(err => {
@@ -107,7 +107,7 @@ export default {
         this.noticeColor = 'white'
         this.notice = 'placeholder'
         this.loginColor = 'black'
-        this.registerColor = '#42b983'
+        this.registerColor = 'orange'
       }
     }
   },
@@ -142,6 +142,6 @@ export default {
     background-color: rgba(211,211,211,0.3);
   }
   #logOutBtn:hover {
-    color:#42b983;
+    color:orange;
   }
 </style>

@@ -42,7 +42,7 @@ export default {
   color: #2c3e50;
 }
 #overflow {
-  color: #42b983;
+  color: orange;
 }
 #loginform {
   text-align: right;
@@ -69,7 +69,7 @@ button {
   background-color: white;
 }
 .iconBtn:hover {
-  color: #42b983;
+  color: orange;
 }
 textarea:focus, input:focus, button:focus {
   outline: none;

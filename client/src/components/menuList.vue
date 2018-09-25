@@ -31,7 +31,7 @@ export default {
   store,
   data: function () {
     return {
-      byVote: '#42b983',
+      byVote: 'orange',
       byDate: 'black',
       mine: 'black',
       starred: 'black',
@@ -42,7 +42,7 @@ export default {
   },
   methods: {
     mostVotedQ: function () {
-      this.byVote = '#42b983'
+      this.byVote = 'orange'
       this.byDate = 'black'
       this.mine = 'black'
       this.starred = 'black'
@@ -52,7 +52,7 @@ export default {
     },
     mostRecentQ: function () {
       this.byVote = 'black'
-      this.byDate = '#42b983'
+      this.byDate = 'orange'
       this.mine = 'black'
       this.starred = 'black'
       this.$store.dispatch('mostRecentQ')
@@ -62,7 +62,7 @@ export default {
     myQ: function () {
       this.byVote = 'black'
       this.byDate = 'black'
-      this.mine = '#42b983'
+      this.mine = 'orange'
       this.starred = 'black'
       this.$store.dispatch('myQ')
       localStorage.setItem('openTab', 'myQ')
@@ -72,7 +72,7 @@ export default {
       this.byVote = 'black'
       this.byDate = 'black'
       this.mine = 'black'
-      this.starred = '#42b983'
+      this.starred = 'orange'
       this.$store.dispatch('starredQ')
       localStorage.setItem('openTab', 'starredQ')
       this.$router.push({ path: '/' })
@@ -137,7 +137,7 @@ export default {
   #toggleModal {
     margin: 1vh 0;
     border: none;
-    background-color: #42b983;
+    background-color: orange;
     color: white;
     height: 50px;
     width: 100%;
@@ -170,7 +170,7 @@ export default {
     height: 50px;
     font-size: 20px;
     padding: 10px 20px;
-    background-color: #42b983;
+    background-color: orange;
     color: white;
     margin: 20px 10px;
     border-radius: 25px;

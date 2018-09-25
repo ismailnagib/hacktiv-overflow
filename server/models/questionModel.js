@@ -26,6 +26,10 @@ const questionSchema = new Schema({
     downvote: {
         type: Array,
         default: []
+    },
+    vote: {
+        type: Number,
+        default: 0
     }
 }, {
   timestamps: true

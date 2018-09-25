@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <div id="nav" class="border-bottom fixed-top row">
-      <router-link id='brand' to="/">hacktiv<span id='overflow' class="col-3">overflow</span></router-link>
+      <router-link id='brand' to="/" class="col-3">hacktiv<span id='overflow'>overflow</span></router-link>
       <loginform id='loginform' class="col-9"></loginform>
     </div>
     <router-view/>
@@ -79,5 +79,6 @@ textarea:focus, input:focus, button:focus {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  color: white;
 }
 </style>

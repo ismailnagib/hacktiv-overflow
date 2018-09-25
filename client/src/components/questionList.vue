@@ -13,7 +13,7 @@
           <router-link class="card-title" :to="{name: 'questionpage', params: {id:`${question._id}`}}">{{ question.title }}</router-link>
           <p class="card-text mb-4">
             asked by {{ question.asker.name }} on {{ question.createdAt | dateSlice }}<br>
-            vote: {{ question.upvote.length - question.downvote.length }} | answer: {{ question.answer.length }}
+            vote: {{ question.vote }} | answer: {{ question.answer.length }}
           </p>
         </div>
       </div>
@@ -25,9 +25,28 @@
           <button class='iconBtn' v-on:click='editModal(detailed._id, detailed.title, detailed.content)'><i class="fas fa-edit"></i></button>
         </div>
         <div id="detailed">
-          <h5>{{ detailed.title }}</h5>
-          <p>asked by {{ detailed.asker.name }} on {{ detailed.createdAt | dateSlice }}<br>
-          vote: {{ detailed.upvote.length - detailed.downvote.length }}</p>
+          <div class="row mb-4">
+            <div class="col-2">
+              <div class="row mb-4">
+                <div class="col-12"><h6><strong>VOTE</strong></h6></div>
+                <button class="col-12 voteBtn haventVote" v-if='islogin && detailed.upvote.indexOf(loggedInUser) === -1 && detailed.asker._id !== loggedInUser' v-on:click='qUpvote()'><i class="fas fa-caret-up"></i></button>
+                <button class="col-12 voteBtn" v-else-if='islogin && detailed.asker._id !== loggedInUser' v-on:click='qUpvote()'><i class="fas fa-caret-up"></i></button>
+                <div class="col-12 unselectable votePh" v-else>.</div>
+                <div class="col-12">{{ detailed.vote }}</div>
+                <button class="col-12 voteBtn haventVote" v-if='islogin && detailed.downvote.indexOf(loggedInUser) === -1 && detailed.asker._id !== loggedInUser' v-on:click='qDownvote()'><i class="fas fa-caret-down"></i></button>
+                <button class="col-12 voteBtn" v-else-if='islogin && detailed.asker._id !== loggedInUser' v-on:click='qDownvote()'><i class="fas fa-caret-down"></i></button>
+                <div class="col-12 unselectable votePh" v-else>.</div>
+              </div>
+            </div>
+            <div class="col-10 border-left">
+              <div class="row">
+                <div class="col-12 unselectable votePh">.</div>
+                <div class="col-12"><h5><strong>{{ detailed.title }}</strong></h5></div>
+                <div class="col-12"><p>asked by {{ detailed.asker.name }} on {{ detailed.createdAt | dateSlice }}</p></div>
+                <div class="col-12"><h6><strong>{{ detailed.answer.length }} ANSWER(S)</strong></h6></div>
+              </div>
+            </div>
+          </div>
           <p>{{ detailed.content }}</p>
           <div id='answerbox' v-if='islogin'>
             <h5><strong>Add your answer here</strong></h5>
@@ -37,9 +56,24 @@
           <div class='border-bottom' id='answers' v-if='detailed.answer.length > 0'>
             <h5><strong>Answers</strong></h5>
             <div v-for="answer in detailed.answer" :key='answer._id' class="border-top pt-2">
-              <button class="iconBtn" v-if='loggedInUser === answer.giver._id' v-on:click='editAnswerModal(answer._id, answer.content)'><i class="fas fa-edit"></i></button>
-              <h6><strong>{{ answer.giver.name }}</strong> answered on {{ answer.createdAt | dateSlice }}</h6>
-              <p id='answer'>{{ answer.content }}</p>
+              <div class="row">
+                <div class="col-2">
+                  <button class="col-12 voteBtn haventVote" v-if='islogin && answer.upvote.indexOf(loggedInUser) === -1 && answer.giver._id !== loggedInUser' v-on:click='aUpvote(answer._id)'><i class="fas fa-caret-up"></i></button>
+                  <button class="col-12 voteBtn" v-else-if='islogin && answer.giver._id !== loggedInUser' v-on:click='aUpvote(answer._id)'><i class="fas fa-caret-up"></i></button>
+                  <div class="col-12 unselectable votePh" v-else>.</div>
+                  <div class="col-12" id='answerVote'>{{ answer.vote }}</div>
+                  <button class="col-12 voteBtn haventVote" v-if='islogin && answer.downvote.indexOf(loggedInUser) === -1 && answer.giver._id !== loggedInUser' v-on:click='aDownvote(answer._id)'><i class="fas fa-caret-down"></i></button>
+                  <button class="col-12 voteBtn" v-else-if='islogin && answer.giver._id !== loggedInUser' v-on:click='aDownvote(answer._id)'><i class="fas fa-caret-down"></i></button>
+                  <div class="col-12 unselectable votePh" v-else>.</div>
+                </div>
+                <div class="col-9 border-left">
+                  <h6><strong>{{ answer.giver.name }}</strong> answered on {{ answer.createdAt | dateSlice }}</h6>
+                  <p id='answer'>{{ answer.content }}</p>
+                </div>
+                <div class="col-1">
+                  <button class="iconBtn" v-if='loggedInUser === answer.giver._id' v-on:click='editAnswerModal(answer._id, answer.content)'><i class="fas fa-edit"></i></button>
+                </div>
+              </div>
             </div>
           </div>
           <div v-else id='noanswer'>
@@ -214,6 +248,58 @@ export default {
             console.log(err)
           })
       }
+    },
+    qUpvote: function () {
+      axios({
+        method: 'put',
+        url: 'http://localhost:3000/questions/upvote',
+        data: { id: this.detailed._id, token: localStorage.getItem('jwtToken') }
+      })
+        .then(data => {
+          this.$store.dispatch('showOne', this.detailed._id)
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    },
+    qDownvote: function () {
+      axios({
+        method: 'put',
+        url: 'http://localhost:3000/questions/downvote',
+        data: { id: this.detailed._id, token: localStorage.getItem('jwtToken') }
+      })
+        .then(data => {
+          this.$store.dispatch('showOne', this.detailed._id)
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    },
+    aUpvote: function (id) {
+      axios({
+        method: 'put',
+        url: 'http://localhost:3000/answers/upvote',
+        data: { id: id, token: localStorage.getItem('jwtToken') }
+      })
+        .then(data => {
+          this.$store.dispatch('showOne', this.detailed._id)
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    },
+    aDownvote: function (id) {
+      axios({
+        method: 'put',
+        url: 'http://localhost:3000/answers/downvote',
+        data: { id: id, token: localStorage.getItem('jwtToken') }
+      })
+        .then(data => {
+          this.$store.dispatch('showOne', this.detailed._id)
+        })
+        .catch(err => {
+          console.log(err)
+        })
     }
   },
   filters: {
@@ -330,5 +416,19 @@ export default {
     margin-top: 1%;
     border: none;
     font-size: 16px;
+  }
+  .voteBtn {
+    background-color: white;
+    color: #42b983;
+  }
+  .haventVote {
+    color: black;
+  }
+  .votePh {
+    height: 40px;
+    width: 100%;
+  }
+  #answerVote {
+    text-align: center;
   }
 </style>

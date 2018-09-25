@@ -111,7 +111,9 @@ export default {
     }
   },
   created () {
-    if (localStorage.getItem('openTab')) {
+    if (this.$route.params.id) {
+      this.$store.dispatch('showOne', this.$route.params.id)
+    } else if (localStorage.getItem('openTab')) {
       this[localStorage.getItem('openTab')]()
     } else {
       this.mostVotedQ()

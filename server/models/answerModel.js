@@ -11,6 +11,14 @@ const answerSchema = new Schema({
         ref: 'User',
         required: true
     },
+    upvote: {
+        type: Array,
+        default: []
+    },
+    downvote: {
+        type: Array,
+        default: []
+    },
     vote: {
         type: Number,
         default: 0

@@ -3,7 +3,11 @@ const Question = require('../models/questionModel')
 module.exports = {
     
     show: function(req, res) {
-        Question.find({}, null, {})
+        Question.find({}, null, {
+            sort: {
+                [req.params.sort]: 'DESC'
+            }
+        })
         .populate('asker')
         .populate({
             path: 'answer',

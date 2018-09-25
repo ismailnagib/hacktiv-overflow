@@ -1,19 +1,34 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
+    <div class="container">
+      <div class="row">
+        <div class="col-12 col-md-3 border-right">
+          <menulist></menulist>
+        </div>
+        <div class="col-12 col-md-1"></div>
+        <div class="col-12 col-md-8">
+          <question-list></question-list>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
+import menulist from '@/components/menuList.vue'
+import questionList from '@/components/questionList.vue'
 
 export default {
-  name: 'home'
+  name: 'home',
+  components: {
+    menulist,
+    questionList
+  }
 }
 </script>
 
 <style>
   .home {
-    margin-top: 10vh;
+    margin-top: 12vh;
   }
 </style>

@@ -19,9 +19,13 @@ const questionSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'Answer'
     }],
-    vote: {
-        type: Number,
-        default: 0
+    upvote: {
+        type: Array,
+        default: []
+    },
+    downvote: {
+        type: Array,
+        default: []
     }
 }, {
   timestamps: true

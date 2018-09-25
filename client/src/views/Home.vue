@@ -31,4 +31,13 @@ export default {
   .home {
     margin-top: 12vh;
   }
+  #backdrop {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    background: rgba(51,51,51,0.8);
+    z-index: 2000;
+  }
 </style>

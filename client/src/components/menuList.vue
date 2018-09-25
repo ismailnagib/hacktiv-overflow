@@ -46,7 +46,7 @@ export default {
       this.byDate = 'black'
       this.mine = 'black'
       this.starred = 'black'
-      this.$store.dispatch('listMostVoted')
+      this.$store.dispatch('mostVotedQ')
       localStorage.setItem('openTab', 'mostVotedQ')
       this.$router.push({ path: '/' })
     },
@@ -55,7 +55,7 @@ export default {
       this.byDate = '#42b983'
       this.mine = 'black'
       this.starred = 'black'
-      this.$store.dispatch('listMostRecent')
+      this.$store.dispatch('mostRecentQ')
       localStorage.setItem('openTab', 'mostRecentQ')
       this.$router.push({ path: '/' })
     },
@@ -64,7 +64,7 @@ export default {
       this.byDate = 'black'
       this.mine = '#42b983'
       this.starred = 'black'
-      this.$store.dispatch('listMine')
+      this.$store.dispatch('myQ')
       localStorage.setItem('openTab', 'myQ')
       this.$router.push({ path: '/' })
     },
@@ -73,7 +73,7 @@ export default {
       this.byDate = 'black'
       this.mine = 'black'
       this.starred = '#42b983'
-      this.$store.dispatch('listStarred')
+      this.$store.dispatch('starredQ')
       localStorage.setItem('openTab', 'starredQ')
       this.$router.push({ path: '/' })
     },
@@ -92,8 +92,10 @@ export default {
       })
         .then(data => {
           this.myQ()
-          this.$store.dispatch('showOne', data.data.data._id)
+          this.$router.push({ path: `/${data.data.data._id}` })
           this.toggleModal()
+          this.questiontitle = ''
+          this.questiondesc = ''
         })
         .catch(err => {
           console.log(err)
@@ -147,15 +149,6 @@ export default {
     width: 100%;
     cursor: pointer;
     border-radius: 25px
-  }
-  #backdrop {
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    left: 0;
-    top: 0;
-    background: rgba(51,51,51,0.8);
-    z-index: 2000;
   }
   #addQuestion {
     position: fixed;

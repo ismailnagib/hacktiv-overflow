@@ -2,9 +2,16 @@
   <div>
     <div class="row" v-if='showAll'>
       <div class="card col-12" v-for='(question, index) in questions' v-bind:key='index'>
+        <div v-if='loggedInUser === question.asker._id'>
+          <button class='iconBtn' v-on:click='removeModal(question._id)'><i class="fas fa-trash-alt"></i></button>
+          <button class='iconBtn' v-on:click='editModal(question._id, question.title, question.content)'><i class="fas fa-edit"></i></button>
+        </div>
+        <div v-else>
+            <div id='cardTopSpace'></div>
+        </div>
         <div class="card-body">
           <router-link class="card-title" :to="{name: 'questionpage', params: {id:`${question._id}`}}">{{ question.title }}</router-link>
-          <p class="card-text">
+          <p class="card-text mb-4">
             asked by {{ question.asker.name }} on {{ question.createdAt | dateSlice }}<br>
             vote: {{ question.upvote.length - question.downvote.length }} | answer: {{ question.answer.length }}
           </p>
@@ -13,25 +20,129 @@
     </div>
     <div class='row' v-else>
       <div class="col-12">
-        <h5>{{ detailed.title }}</h5>
-        <p>asked by {{ detailed.asker.name }}<br>
-        vote: {{ detailed.upvote.length - detailed.downvote.length }}</p>
-        <p v-for='(item, index) in detailed.answer' :key='index'>
-          {{ item.content }}
-        </p>
+        <div v-if='loggedInUser === detailed.asker._id'>
+          <button class='iconBtn' v-on:click='removeModal(detailed._id, "detailed")'><i class="fas fa-trash-alt"></i></button>
+          <button class='iconBtn' v-on:click='editModal(detailed._id, detailed.title, detailed.content)'><i class="fas fa-edit"></i></button>
+        </div>
+        <div id="detailed">
+          <h5>{{ detailed.title }}</h5>
+          <p>asked by {{ detailed.asker.name }} on {{ detailed.createdAt | dateSlice }}<br>
+          vote: {{ detailed.upvote.length - detailed.downvote.length }}</p>
+          <p>{{ detailed.content }}</p>
+          <p v-for='(item, index) in detailed.answer' :key='index'>
+            {{ item.content }}
+          </p>
+        </div>
       </div>
     </div>
+
+    <!-- MODALS -->
+    <div v-if='openEdit'>
+      <div id='backdrop'></div>
+      <div id='editQuestion'>
+        <button class="iconBtn closeModal" v-on:click="editModal()" title='Close'><i class="far fa-times-circle"></i></button><br>
+        <div id='editQuestionInput'>
+          <input v-model='questiontitle' type="text" placeholder="Question">
+          <textarea rows=5 v-model='questiondesc' placeholder="Description"></textarea>
+        </div>
+        <button class='modalBtn' v-on:click="editModal()">Cancel Edit</button>
+        <button class='modalBtn' v-on:click="editQuestion()">Commit Edit</button><br>
+      </div>
+    </div>
+
+    <div v-if='openRemove'>
+      <div id='backdrop'></div>
+      <div class='removeConfirmation'>
+        <button class="iconBtn closeModal" v-on:click="removeModal()" title='Close'><i class="far fa-times-circle"></i></button><br>
+        <h3>Are you sure?</h3>
+        <h5>You're about to delete the question permanently</h5>
+        <button class='modalBtn' v-on:click="removeModal()">Nope</button>
+        <button class='modalBtn' v-on:click="removeQuestion()">Yeah</button><br>
+      </div>
+    </div>
+
   </div>
 </template>
 
 <script>
+import axios from 'axios'
 import store from '@/store'
 
 export default {
   name: 'questionlist',
   store,
   data: function () {
-    return {}
+    return {
+      loggedInUser: localStorage.getItem('userId'),
+      openEdit: false,
+      openRemove: false,
+      questiontitle: '',
+      questiondesc: '',
+      editId: '',
+      removeId: ''
+    }
+  },
+  methods: {
+    editModal: function (id, title, content, from) {
+      if (this.openEdit) {
+        this.openEdit = false
+      } else {
+        this.openEdit = true
+      }
+      if (id && title && content) {
+        this.editId = id
+        this.questiontitle = title
+        this.questiondesc = content
+      }
+      if (from === 'detailed') {
+        this.detailedUD = true
+      } else {
+        this.detailedUD = false
+      }
+    },
+    editQuestion: function () {
+      axios({
+        method: 'put',
+        url: 'http://localhost:3000/questions/',
+        data: { id: this.editId, token: localStorage.getItem('jwtToken'), title: this.questiontitle, content: this.questiondesc }
+      })
+        .then(data => {
+          if (this.detailedUD) {
+            this.$store.dispatch('showOne', this.detailed._id)
+          } else {
+            this.$store.dispatch(localStorage.getItem('openTab'))
+          }
+          this.openEdit = false
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    },
+    removeModal: function (id, from) {
+      if (this.openRemove) {
+        this.openRemove = false
+      } else {
+        this.openRemove = true
+      }
+      if (id) {
+        this.removeId = id
+      }
+    },
+    removeQuestion: function () {
+      axios({
+        method: 'delete',
+        url: 'http://localhost:3000/questions/',
+        data: { id: this.removeId, token: localStorage.getItem('jwtToken') }
+      })
+        .then(data => {
+          this.$store.dispatch(localStorage.getItem('openTab'))
+          this.$store.commit('showAllTrue')
+          this.openRemove = false
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    }
   },
   filters: {
     dateSlice (value) {
@@ -41,6 +152,9 @@ export default {
   watch: {
     '$route': function () {
       this.$store.dispatch('showOne', this.$route.params.id)
+    },
+    islogin: function () {
+      this.loggedInUser = localStorage.getItem('userId')
     }
   },
   computed: {
@@ -58,5 +172,41 @@ export default {
 </script>
 
 <style>
-
+  #cardTopSpace {
+    height: 40px;
+  }
+  #detailed {
+    margin-top: 40px;
+  }
+  #editQuestion {
+    position: fixed;
+    background-color: white;
+    left: 25%;
+    top: 32.5%;
+    width: 50%;
+    height: 35%;
+    z-index: 2101;
+  }
+  #editQuestionInput textarea {
+    width: 90%;
+    margin-top: 1%;
+    border: none;
+    font-size: 16px;
+  }
+  #editQuestionInput input {
+    border: none;
+    width: 90%;
+    margin-top: 1%;
+    font-size: 20px;
+    padding: 10px;
+  }
+  .removeConfirmation {
+    position: fixed;
+    background-color: white;
+    left: 25%;
+    top: 37.5%;
+    width: 50%;
+    height: 20%;
+    z-index: 2101;
+  }
 </style>

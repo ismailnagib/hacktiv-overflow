@@ -43,7 +43,7 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    listMostVoted: function (context) {
+    mostVotedQ: function (context) {
       axios({
         method: 'get',
         url: 'http://localhost:3000/questions/sort/vote'
@@ -55,7 +55,7 @@ export default new Vuex.Store({
           console.log(err)
         })
     },
-    listMostRecent: function (context) {
+    mostRecentQ: function (context) {
       axios({
         method: 'get',
         url: 'http://localhost:3000/questions/sort/createdAt'
@@ -67,7 +67,7 @@ export default new Vuex.Store({
           console.log(err)
         })
     },
-    listMine: function (context) {
+    myQ: function (context) {
       axios({
         method: 'get',
         url: 'http://localhost:3000/questions/sort/createdAt'
@@ -85,7 +85,7 @@ export default new Vuex.Store({
           console.log(err)
         })
     },
-    listStarred: function (context) {
+    starredQ: function (context) {
       axios({
         method: 'post',
         url: 'http://localhost:3000/users',

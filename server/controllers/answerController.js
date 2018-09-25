@@ -20,14 +20,14 @@ module.exports = {
             giver: req.userId
         })
         .then(answer => {
-            Question.findById(req.body.postId)
+            Question.findById(req.body.questionId)
             .then(question => {
                 let answers = question.answer
                 answers.push(answer._id)
                 Question.updateOne({
-                    _id: req.body.postId
+                    _id: req.body.questionId
                 }, {
-                    answers: answers
+                    answer: answers
                 })
                 .then(data => {
                     res.status(201).json({data: answer})
@@ -35,6 +35,9 @@ module.exports = {
                 .catch(err => {
                     res.status(500).json({message: err})
                 })
+            })
+            .catch(err => {
+                res.status(500).json({message: err})
             })
         })
         .catch(err => {

@@ -80,7 +80,8 @@ export default {
         })
     },
     logout: function () {
-      localStorage.clear()
+      localStorage.removeItem('jwtToken')
+      localStorage.removeItem('userId')
       store.commit('logout')
     },
     register: function () {

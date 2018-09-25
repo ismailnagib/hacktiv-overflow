@@ -8,7 +8,6 @@ export default new Vuex.Store({
   state: {
     islogin: false,
     questions: [],
-    afterlogout: false,
     detailed: {},
     showAll: true
   },
@@ -18,7 +17,6 @@ export default new Vuex.Store({
     },
     logout (state) {
       state.islogin = false
-      state.afterlogout = true
     },
     changeQuestions (state, questions) {
       state.questions = questions
@@ -28,9 +26,6 @@ export default new Vuex.Store({
     },
     resetQuestions (state) {
       state.questions = []
-    },
-    afterLogout (state) {
-      state.afterlogout = false
     },
     changeDetailed (state, detailed) {
       state.detailed = detailed

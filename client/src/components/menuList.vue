@@ -116,14 +116,6 @@ export default {
     } else {
       this.mostVotedQ()
     }
-  },
-  watch: {
-    afterlogout () {
-      if (this.afterlogout) {
-        this.mostVotedQ()
-        this.$store.dispatch('afterLogout')
-      }
-    }
   }
 }
 </script>

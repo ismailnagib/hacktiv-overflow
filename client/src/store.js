@@ -8,7 +8,9 @@ export default new Vuex.Store({
   state: {
     islogin: false,
     questions: [],
-    afterlogout: false
+    afterlogout: false,
+    detailed: {},
+    showAll: true
   },
   mutations: {
     login (state) {
@@ -29,6 +31,15 @@ export default new Vuex.Store({
     },
     afterLogout (state) {
       state.afterlogout = false
+    },
+    changeDetailed (state, detailed) {
+      state.detailed = detailed
+    },
+    showAllTrue (state) {
+      state.showAll = true
+    },
+    showAllFalse (state) {
+      state.showAll = false
     }
   },
   actions: {
@@ -86,6 +97,23 @@ export default new Vuex.Store({
         .catch(err => {
           console.log(err)
         })
+    },
+    showOne: function (context, id) {
+      if (id !== undefined) {
+        axios({
+          method: 'get',
+          url: `http://localhost:3000/questions/${id}`
+        })
+          .then(data => {
+            context.commit('changeDetailed', data.data.data)
+            context.commit('showAllFalse')
+          })
+          .catch(err => {
+            console.log(err)
+          })
+      } else {
+        context.commit('showAllTrue')
+      }
     }
   }
 })

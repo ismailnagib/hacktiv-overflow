@@ -48,7 +48,29 @@ export default {
   text-align: right;
   right: 3%;
 }
+button {
+  border: none;
+  cursor: pointer;
+  height: 40px;
+  padding: 10px 20px;
+  border-radius: 20px;
+}
 
+.closeModal {
+  margin-top: 1% !important;
+  margin-right: 1% !important;
+}
+.iconBtn {
+  margin: 5px 0;
+  float: right;
+  height: 30px;
+  padding: 5px 10px;
+  border-radius: 15px;
+  background-color: white;
+}
+.iconBtn:hover {
+  color: #42b983;
+}
 textarea:focus, input:focus, button:focus {
   outline: none;
 }

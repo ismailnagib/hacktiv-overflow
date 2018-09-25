@@ -15,7 +15,7 @@
       <div class="col-12">
         <h5>{{ detailed.title }}</h5>
         <p>asked by {{ detailed.asker.name }}<br>
-        vote: {{ detailed.vote }}</p>
+        vote: {{ detailed.upvote.length - detailed.downvote.length }}</p>
         <p v-for='(item, index) in detailed.answer' :key='index'>
           {{ item.content }}
         </p>
@@ -25,36 +25,13 @@
 </template>
 
 <script>
-import axios from 'axios'
 import store from '@/store'
 
 export default {
   name: 'questionlist',
   store,
   data: function () {
-    return {
-      showAll: true,
-      detailed: {}
-    }
-  },
-  methods: {
-    showOne: function (id) {
-      if (id !== undefined) {
-        axios({
-          method: 'get',
-          url: `http://localhost:3000/questions/${id}`
-        })
-          .then(data => {
-            this.detailed = data.data.data
-            this.showAll = false
-          })
-          .catch(err => {
-            console.log(err)
-          })
-      } else {
-        this.showAll = true
-      }
-    }
+    return {}
   },
   filters: {
     dateSlice (value) {
@@ -63,12 +40,18 @@ export default {
   },
   watch: {
     '$route': function () {
-      this.showOne(this.$route.params.id)
+      this.$store.dispatch('showOne', this.$route.params.id)
     }
   },
   computed: {
     questions () {
       return this.$store.state.questions
+    },
+    detailed () {
+      return this.$store.state.detailed
+    },
+    showAll () {
+      return this.$store.state.showAll
     }
   }
 }

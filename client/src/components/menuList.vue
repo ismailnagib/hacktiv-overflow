@@ -1,9 +1,24 @@
 <template>
   <div id='menulist'>
-    <button v-on:click='mostVotedQ()' v-bind:style='({color: byVote})'>Most Voted Questions</button><br><br>
-    <button v-on:click='mostRecentQ()' v-bind:style='({color: byDate})'>Most Recent Questions</button><br><br>
-    <button v-on:click='myQ()' v-bind:style='({color: mine})' v-if='islogin'>My Questions</button><br><br>
-    <button v-on:click='starredQ()' v-bind:style='({color: starred})' v-if='islogin'>Starred Questions</button>
+    <div v-if='islogin'>
+      <button id='toggleModal' v-on:click='toggleModal()' title="Post A Question"><strong>Post A Question</strong></button><br><br>
+      <div v-if='openModal'>
+        <div id='backdrop'></div>
+        <div id='addQuestion'>
+          <button class='iconBtn closeModal' v-on:click="toggleModal()" title='Close'><i class="far fa-times-circle"></i></button><br>
+          <div id='addQuestionInput'>
+            <input v-model='questiontitle' type="text" placeholder="Question">
+            <textarea rows=5 v-model='questiondesc' placeholder="Description"></textarea>
+          </div>
+          <button class='modalBtn' v-on:click="toggleModal()">Maybe Later</button>
+          <button class='modalBtn' v-on:click="addQuestion()">Post It</button><br>
+        </div>
+      </div>
+    </div>
+    <button class='menubtn' v-on:click='mostVotedQ()' v-bind:style='({color: byVote})'>Most Voted Questions</button><br><br>
+    <button class='menubtn' v-on:click='mostRecentQ()' v-bind:style='({color: byDate})'>Most Recent Questions</button><br><br>
+    <button class='menubtn' v-on:click='myQ()' v-bind:style='({color: mine})' v-if='islogin'>My Questions</button><br><br>
+    <button class='menubtn' v-on:click='starredQ()' v-bind:style='({color: starred})' v-if='islogin'>Starred Questions</button>
   </div>
 </template>
 
@@ -19,7 +34,10 @@ export default {
       byVote: '#42b983',
       byDate: 'black',
       mine: 'black',
-      starred: 'black'
+      starred: 'black',
+      openModal: false,
+      questiontitle: '',
+      questiondesc: ''
     }
   },
   methods: {
@@ -30,6 +48,7 @@ export default {
       this.starred = 'black'
       this.$store.dispatch('listMostVoted')
       localStorage.setItem('openTab', 'mostVotedQ')
+      this.$router.push({ path: '/' })
     },
     mostRecentQ: function () {
       this.byVote = 'black'
@@ -38,6 +57,7 @@ export default {
       this.starred = 'black'
       this.$store.dispatch('listMostRecent')
       localStorage.setItem('openTab', 'mostRecentQ')
+      this.$router.push({ path: '/' })
     },
     myQ: function () {
       this.byVote = 'black'
@@ -46,6 +66,7 @@ export default {
       this.starred = 'black'
       this.$store.dispatch('listMine')
       localStorage.setItem('openTab', 'myQ')
+      this.$router.push({ path: '/' })
     },
     starredQ: function () {
       this.byVote = 'black'
@@ -54,6 +75,29 @@ export default {
       this.starred = '#42b983'
       this.$store.dispatch('listStarred')
       localStorage.setItem('openTab', 'starredQ')
+      this.$router.push({ path: '/' })
+    },
+    toggleModal: function () {
+      if (this.openModal === true) {
+        this.openModal = false
+      } else {
+        this.openModal = true
+      }
+    },
+    addQuestion: function () {
+      axios({
+        method: 'post',
+        url: 'http://localhost:3000/questions',
+        data: { title: this.questiontitle, content: this.questiondesc, token: localStorage.getItem('jwtToken') }
+      })
+        .then(data => {
+          this.myQ()
+          this.$store.dispatch('showOne', data.data.data._id)
+          this.toggleModal()
+        })
+        .catch(err => {
+          console.log(err)
+        })
     }
   },
   computed: {
@@ -83,7 +127,7 @@ export default {
 </script>
 
 <style>
-    #menulist button {
+  .menubtn {
         position: absolute;
         right: 5%;
         border: none;
@@ -91,4 +135,57 @@ export default {
         cursor: pointer;
         font-weight: bold;
     }
+  .menubtn:hover {
+    background-color: rgba(211,211,211,0.3);
+  }
+  #toggleModal {
+    margin: 1vh 0;
+    border: none;
+    background-color: #42b983;
+    color: white;
+    height: 50px;
+    width: 100%;
+    cursor: pointer;
+    border-radius: 25px
+  }
+  #backdrop {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    background: rgba(51,51,51,0.8);
+    z-index: 2000;
+  }
+  #addQuestion {
+    position: fixed;
+    background-color: white;
+    left: 25%;
+    top: 32.5%;
+    width: 50%;
+    height: 35%;
+    z-index: 2001;
+  }
+  #addQuestionInput textarea {
+    width: 90%;
+    margin-top: 1%;
+    border: none;
+    font-size: 16px;
+  }
+  #addQuestionInput input {
+    border: none;
+    width: 90%;
+    margin-top: 1%;
+    font-size: 20px;
+    padding: 10px;
+  }
+  .modalBtn {
+    height: 50px;
+    font-size: 20px;
+    padding: 10px 20px;
+    background-color: #42b983;
+    color: white;
+    margin: 20px 10px;
+    border-radius: 25px;
+  }
 </style>

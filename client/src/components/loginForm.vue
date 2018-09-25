@@ -135,6 +135,7 @@ export default {
     border-radius: 0;
     padding: 3px 15px;
     margin: 0px 5px;
+    background-color: white;
   }
   .logBtn:hover {
     background-color: rgba(211,211,211,0.3);

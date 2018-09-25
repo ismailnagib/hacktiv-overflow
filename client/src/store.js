@@ -9,7 +9,18 @@ export default new Vuex.Store({
     islogin: false,
     questions: [],
     detailed: {},
-    showAll: true
+    showAll: true,
+    loggedInUser: localStorage.getItem('userId'),
+    openEdit: false,
+    openRemove: false,
+    questiontitle: '',
+    questiondesc: '',
+    editId: '',
+    removeId: '',
+    newanswer: '',
+    editanswer: '',
+    openEditAnswer: false,
+    editAnswerId: ''
   },
   mutations: {
     login (state) {
@@ -35,6 +46,48 @@ export default new Vuex.Store({
     },
     showAllFalse (state) {
       state.showAll = false
+    },
+    updateLoggedInUser (state) {
+      state.loggedInUser = localStorage.getItem('userId')
+    },
+    openEditTrue (state) {
+      state.openEdit = true
+    },
+    openEditFalse (state) {
+      state.openEdit = false
+    },
+    openRemoveTrue (state) {
+      state.openRemove = true
+    },
+    openRemoveFalse (state) {
+      state.openRemove = false
+    },
+    openEditAnswerTrue (state) {
+      state.openEditAnswer = true
+    },
+    openEditAnswerFalse (state) {
+      state.openEditAnswer = false
+    },
+    updateQuestionTitle (state, value) {
+      state.questiontitle = value
+    },
+    updateQuestionDesc (state, value) {
+      state.questiondesc = value
+    },
+    updateEditId (state, value) {
+      state.editId = value
+    },
+    updateRemoveId (state, value) {
+      state.removeId = value
+    },
+    updateNewAnswer (state, value) {
+      state.newanswer = value
+    },
+    updateEditAnswer (state, value) {
+      state.editanswer = value
+    },
+    updateEditAnswerId (state, value) {
+      state.editAnswerId = value
     }
   },
   actions: {

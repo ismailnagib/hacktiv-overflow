@@ -125,36 +125,22 @@
 <script>
 import axios from 'axios'
 import store from '@/store'
+import { mapState } from 'vuex'
 
 export default {
   name: 'questionlist',
   store,
-  data: function () {
-    return {
-      loggedInUser: localStorage.getItem('userId'),
-      openEdit: false,
-      openRemove: false,
-      questiontitle: '',
-      questiondesc: '',
-      editId: '',
-      removeId: '',
-      newanswer: '',
-      editanswer: '',
-      openEditAnswer: false,
-      editAnswerId: ''
-    }
-  },
   methods: {
     editModal: function (id, title, content, from) {
       if (this.openEdit) {
-        this.openEdit = false
+        this.$store.commit('openEditFalse')
       } else {
-        this.openEdit = true
+        this.$store.commit('openEditTrue')
       }
       if (id && title && content) {
-        this.editId = id
-        this.questiontitle = title
-        this.questiondesc = content
+        this.$store.commit('updateEditId', id)
+        this.$store.commit('updateQuestionTitle', title)
+        this.$store.commit('updateQuestionDesc', content)
       }
       if (from === 'detailed') {
         this.detailedUD = true
@@ -175,7 +161,7 @@ export default {
             } else {
               this.$store.dispatch(localStorage.getItem('openTab'))
             }
-            this.openEdit = false
+            this.$store.commit('openEditFalse')
           })
           .catch(err => {
             console.log(err)
@@ -184,12 +170,12 @@ export default {
     },
     removeModal: function (id, from) {
       if (this.openRemove) {
-        this.openRemove = false
+        this.$store.commit('openRemoveFalse')
       } else {
-        this.openRemove = true
+        this.$store.commit('openRemoveTrue')
       }
       if (id) {
-        this.removeId = id
+        this.$store.commit('updateRemoveId', id)
       }
     },
     removeQuestion: function () {
@@ -201,7 +187,7 @@ export default {
         .then(data => {
           this.$store.dispatch(localStorage.getItem('openTab'))
           this.$store.commit('showAllTrue')
-          this.openRemove = false
+          this.$store.commit('openRemoveFalse')
         })
         .catch(err => {
           console.log(err)
@@ -214,7 +200,7 @@ export default {
         data: { questionId: this.detailed._id, content: this.newanswer, token: localStorage.getItem('jwtToken') }
       })
         .then(data => {
-          this.newanswer = ''
+          this.$store.commit('updateNewAnswer', '')
           this.$store.dispatch('showOne', this.detailed._id)
         })
         .catch(err => {
@@ -223,13 +209,13 @@ export default {
     },
     editAnswerModal: function (id, content) {
       if (this.openEditAnswer) {
-        this.openEditAnswer = false
+        this.$store.commit('openEditAnswerFalse')
       } else {
-        this.openEditAnswer = true
+        this.$store.commit('openEditAnswerTrue')
       }
       if (id && content) {
-        this.editAnswerId = id
-        this.editanswer = content
+        this.$store.commit('updateEditAnswerId', id)
+        this.$store.commit('updateEditAnswer', content)
       }
     },
     editAnswer: function () {
@@ -240,9 +226,9 @@ export default {
           data: { id: this.editAnswerId, content: this.editanswer, token: localStorage.getItem('jwtToken') }
         })
           .then(data => {
-            this.editanswer = ''
+            this.$store.commit('updateEditAnswer', '')
             this.$store.dispatch('showOne', this.detailed._id)
-            this.openEditAnswer = false
+            this.$store.commit('openEditAnswerFalse')
           })
           .catch(err => {
             console.log(err)
@@ -312,21 +298,66 @@ export default {
       this.$store.dispatch('showOne', this.$route.params.id)
     },
     islogin: function () {
-      this.loggedInUser = localStorage.getItem('userId')
+      this.$store.commit('updateLoggedInUser')
     }
   },
   computed: {
-    questions () {
-      return this.$store.state.questions
+    ...mapState(['questions', 'detailed', 'showAll', 'islogin', 'loggedInUser', 'openEdit', 'openRemove', 'openEditAnswer']),
+    questiontitle: {
+      get () {
+        return this.$store.state.questiontitle
+      },
+      set (value) {
+        this.$store.commit('updateQuestionTitle', value)
+      }
     },
-    detailed () {
-      return this.$store.state.detailed
+    questiondesc: {
+      get () {
+        return this.$store.state.questiondesc
+      },
+      set (value) {
+        this.$store.commit('updateQuestionDesc', value)
+      }
     },
-    showAll () {
-      return this.$store.state.showAll
+    editId: {
+      get () {
+        return this.$store.state.editId
+      },
+      set (value) {
+        this.$store.commit('updateEditId', value)
+      }
     },
-    islogin () {
-      return this.$store.state.islogin
+    removeId: {
+      get () {
+        return this.$store.state.removeId
+      },
+      set (value) {
+        this.$store.commit('updateRemoveId', value)
+      }
+    },
+    newanswer: {
+      get () {
+        return this.$store.state.newanswer
+      },
+      set (value) {
+        this.$store.commit('updateNewAnswer', value)
+      }
+    },
+    editanswer: {
+      get () {
+        return this.$store.state.editanswer
+      },
+      set (value) {
+        this.$store.commit('updateEditAnswer', value)
+      }
+    },
+    editAnswerId: {
+      get () {
+        return this.$store.state.editAnswerId
+      },
+      set (value) {
+        this.$store.commit('updateEditAnswerId', value)
+      }
     }
   }
 }

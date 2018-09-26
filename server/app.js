@@ -1,17 +1,23 @@
-require('dotenv').config()
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var logger = require('morgan');
-var cors = require('cors')
-var mongoose = require('mongoose')
+require('dotenv').config();
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const logger = require('morgan');
+const cors = require('cors');
+
+const CronJob = require('cron').CronJob;
+const kue = require('kue');
+const queue = kue.createQueue();
+const nodemailer = require('nodemailer');
+
+const mongoose = require('mongoose');
 mongoose.connect(`mongodb://localhost:27017/hacktiv-overflow`, { useNewUrlParser: true });
 
-var usersRouter = require('./routes/users');
-var questionsRouter = require('./routes/questions');
-var answersRouter = require('./routes/answers');
+const usersRouter = require('./routes/users');
+const questionsRouter = require('./routes/questions');
+const answersRouter = require('./routes/answers');
 
-var app = express();
+const app = express();
 
 app.use(cors());
 app.use(logger('dev'));
@@ -22,6 +28,33 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/users', usersRouter);
 app.use('/questions', questionsRouter);
 app.use('/answers', answersRouter);
+
+new CronJob('00 * * * * *', function() {
+    queue.process('email', function(job, done) {
+        let transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: 'backgroundjobtest@gmail.com',
+                pass: 'J6MQN5ILhIs#'
+            }
+        })
+        let mailOptions = {
+            from: 'backgroundjobtest@gmail.com',
+            to: job.data.to,
+            subject: job.data.title,
+            html: job.data.template
+        };
+
+        transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                return console.log(error);
+            } else {
+                console.log('Message sent: %s', info.messageId);
+                done()
+            }
+        });
+    });
+}, null, true, 'Asia/Jakarta');
 
 // // catch 404 and forward to error handler
 // app.use(function(req, res, next) {

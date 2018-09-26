@@ -1,5 +1,7 @@
 const Answer = require('../models/answerModel')
 const Question = require('../models/questionModel')
+const kue = require('kue')
+const queue = kue.createQueue();
 
 module.exports = {
     
@@ -21,6 +23,7 @@ module.exports = {
         })
         .then(answer => {
             Question.findById(req.body.questionId)
+            .populate('asker')
             .then(question => {
                 let answers = question.answer
                 answers.push(answer._id)
@@ -30,6 +33,16 @@ module.exports = {
                     answer: answers
                 })
                 .then(data => {
+
+                    queue.create('email', {  
+                        title: 'Someone answered your question!',
+                        to: question.asker.email,
+                        template: `<h2>Hi, ${question.asker.name}.</h2>
+                        <p>Someone has answered your question, perhaps you'll want to check it out here: http://hackover.ismailnagib.xyz/#/${req.body.questionId}</p>
+                        <p>With love,</p>
+                        <p><strong>The HacktivOverflow Team</strong></p>`
+                    }).save()
+
                     res.status(201).json({data: answer})
                 })
                 .catch(err => {

@@ -13,32 +13,42 @@ module.exports = {
             
             if (req.body.name && req.body.email && req.body.password) {
                 User.findOne({
-                    email: req.body.email
-                  })
-                  .then (data => {
-                      if (data) {
-                          res.status(500).json({message: 'Email has been registered before'})
-                      } else {
-                          if (req.body.password.length >= 6) {
-                              User.create({
-                                  name: req.body.name,
-                                  email: req.body.email,
-                                  password: hashedPassword
-                              })
-                              .then(data => {
-                                  res.status(201).json({data: data})
-                              })
-                              .catch(err => {
-                                  res.status(500).json({message: err})
-                              })
-                          } else {
-                              res.status(500).json({message: 'Password should contain at least 6 characters'})
-                          }
-                      }
-                  })
-                  .catch (err => {
-                      res.status(500).json({message: 'An error occured during the registration process. Please try again later.'})
-                  })
+                        email: req.body.email
+                    })
+                    .then (data => {
+                        if (data) {
+                            res.status(500).json({message: 'Email has been registered before'})
+                        } else {
+                            if (req.body.password.length >= 6) {
+                                User.create({
+                                    name: req.body.name,
+                                    email: req.body.email,
+                                    password: hashedPassword
+                                })
+                                .then(data => {
+
+                                    queue.create('email', {  
+                                        title: 'Welcome to the family!',
+                                        to: req.body.email,
+                                        template: `<h2>Hi, ${req.body.name}.</h2>
+                                        <p>We know, all those problems that you're facing are damn hard, but don't worry, we're all here to help.</p>
+                                        <p>With love, from your new family,</p>
+                                        <p><strong>HacktivOverflow</strong></p>`
+                                    }).save()
+
+                                    res.status(201).json({data: data})
+                                })
+                                .catch(err => {
+                                    res.status(500).json({message: err})
+                                })
+                            } else {
+                                res.status(500).json({message: 'Password should contain at least 6 characters'})
+                            }
+                        }
+                    })
+                    .catch (err => {
+                        res.status(500).json({message: 'An error occured during the registration process. Please try again later.'})
+                    })
             } else {
                 res.status(500).json({message: 'You should input your name, email, and a password to register'})
             }

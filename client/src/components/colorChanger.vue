@@ -45,13 +45,19 @@ export default {
         switch (openTab) {
           case 'mostVotedQ': {
             this.$store.commit('updateByVote', this.chosencolor)
+            this.$store.commit('updateByDate', 'black')
+            this.$store.commit('updateMine', 'black')
             break
           }
           case 'mostRecentQ': {
+            this.$store.commit('updateByVote', 'black')
             this.$store.commit('updateByDate', this.chosencolor)
+            this.$store.commit('updateMine', 'black')
             break
           }
           case 'myQ': {
+            this.$store.commit('updateByVote', 'black')
+            this.$store.commit('updateByDate', 'black')
             this.$store.commit('updateMine', this.chosencolor)
             break
           }

@@ -21,10 +21,19 @@ export default new Vuex.Store({
     editanswer: '',
     openEditAnswer: false,
     editAnswerId: '',
+    defaultColor: 'orange',
     byVote: 'orange',
     byDate: 'black',
     mine: 'black',
-    openModal: false
+    openModal: false,
+    notice: 'placeholder',
+    noticeColor: 'white',
+    isregistering: false,
+    loginColor: 'orange',
+    registerColor: 'black',
+    name: '',
+    email: '',
+    password: ''
   },
   mutations: {
     login (state) {
@@ -78,6 +87,24 @@ export default new Vuex.Store({
     openModalFalse (state) {
       state.openModal = false
     },
+    updateNotice (state, value) {
+      state.notice = value
+    },
+    updateNoticeColor (state, value) {
+      state.noticeColor = value
+    },
+    updateLoginColor (state, value) {
+      state.loginColor = value
+    },
+    updateRegisterColor (state, value) {
+      state.registerColor = value
+    },
+    isRegisteringTrue (state) {
+      state.isregistering = true
+    },
+    isRegisteringFalse (state) {
+      state.isregistering = false
+    },
     updateQuestionTitle (state, value) {
       state.questiontitle = value
     },
@@ -107,17 +134,26 @@ export default new Vuex.Store({
     },
     updateMine (state, value) {
       state.mine = value
+    },
+    updateName (state, value) {
+      state.name = value
+    },
+    updateEmail (state, value) {
+      state.email = value
+    },
+    updatePassword (state, value) {
+      state.password = value
     }
   },
   actions: {
-    mostVotedQ: function (context) {
+    mostVotedQ: function (context, color) {
       axios({
         method: 'get',
         url: 'http://localhost:3000/questions/sort/vote'
       })
         .then(data => {
           context.commit('changeQuestions', data.data.data)
-          context.commit('updateByVote', 'orange')
+          context.commit('updateByVote', color)
           context.commit('updateByDate', 'black')
           context.commit('updateMine', 'black')
         })
@@ -125,7 +161,7 @@ export default new Vuex.Store({
           console.log(err)
         })
     },
-    mostRecentQ: function (context) {
+    mostRecentQ: function (context, color) {
       axios({
         method: 'get',
         url: 'http://localhost:3000/questions/sort/createdAt'
@@ -133,14 +169,14 @@ export default new Vuex.Store({
         .then(data => {
           context.commit('changeQuestions', data.data.data)
           context.commit('updateByVote', 'black')
-          context.commit('updateByDate', 'orange')
+          context.commit('updateByDate', color)
           context.commit('updateMine', 'black')
         })
         .catch(err => {
           console.log(err)
         })
     },
-    myQ: function (context) {
+    myQ: function (context, color) {
       axios({
         method: 'get',
         url: 'http://localhost:3000/questions/sort/createdAt'
@@ -155,7 +191,7 @@ export default new Vuex.Store({
           })
           context.commit('updateByVote', 'black')
           context.commit('updateByDate', 'black')
-          context.commit('updateMine', 'orange')
+          context.commit('updateMine', color)
         })
         .catch(err => {
           console.log(err)

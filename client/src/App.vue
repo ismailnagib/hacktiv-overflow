@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <div id="nav" class="border-bottom fixed-top row">
-      <router-link id='brand' to="/" class="col-3">hacktiv<span id='overflow'>overflow</span></router-link>
+      <router-link id='brand' to="/" class="col-3">hacktiv<span v-bind:style='{color: defaultColor}'>overflow</span></router-link>
       <loginform id='loginform' class="col-9"></loginform>
     </div>
     <router-view/>
@@ -10,11 +10,15 @@
 
 <script>
 import loginform from '@/components/loginForm.vue'
+import { mapState } from 'vuex'
 
 export default {
   name: 'app',
   components: {
     loginform
+  },
+  computed: {
+    ...mapState(['defaultColor'])
   }
 }
 </script>
@@ -28,7 +32,7 @@ export default {
   color: #2c3e50;
 }
 #brand {
-  padding: 20px 50px;
+  padding: 20px 0px 20px 10%;
   text-align: left;
   font-size: 30px;
 }
@@ -41,12 +45,9 @@ export default {
   font-weight: bold;
   color: #2c3e50;
 }
-#overflow {
-  color: orange;
-}
 #loginform {
   text-align: right;
-  right: 3%;
+  right: 10%
 }
 button {
   border: none;
@@ -67,9 +68,6 @@ button {
   padding: 5px 10px;
   border-radius: 15px;
   background-color: white;
-}
-.iconBtn:hover {
-  color: orange;
 }
 textarea:focus, input:focus, button:focus {
   outline: none;

@@ -15,30 +15,19 @@
 <script>
 import axios from 'axios'
 import store from '@/store'
+import { mapState } from 'vuex'
 
 export default {
   name: 'loginform',
   store,
-  data: function () {
-    return {
-      name: '',
-      email: '',
-      password: '',
-      notice: 'placeholder',
-      noticeColor: 'white',
-      isregistering: false,
-      loginColor: 'orange',
-      registerColor: 'black'
-    }
-  },
   methods: {
     login: function () {
       if (this.isregistering) {
-        this.isregistering = false
-        this.noticeColor = 'white'
-        this.notice = 'placeholder'
-        this.loginColor = 'orange'
-        this.registerColor = 'black'
+        this.$store.commit('isRegisteringFalse')
+        this.$store.commit('updateNoticeColor', 'white')
+        this.$store.commit('updateNotice', 'placeholder')
+        this.$store.commit('updateLoginColor', this.defaultColor)
+        this.$store.commit('updateRegisterColor', 'black')
       } else {
         axios({
           method: 'post',
@@ -49,14 +38,15 @@ export default {
             localStorage.setItem('jwtToken', data.data.token)
             localStorage.setItem('userId', data.data.userId)
             store.commit('login')
-            this.noticeColor = 'white'
-            this.notice = 'placeholder'
-            this.email = ''
-            this.password = ''
+            this.$store.commit('updateNoticeColor', 'white')
+            this.$store.commit('updateNotice', 'placeholder')
+            this.$store.commit('updateName', '')
+            this.$store.commit('updateEmail', '')
+            this.$store.commit('updatePassword', '')
           })
           .catch(err => {
-            this.notice = err.response.data.message
-            this.noticeColor = 'red'
+            this.$store.commit('updateNotice', err.response.data.message)
+            this.$store.commit('updateNoticeColor', 'red')
           })
       }
     },
@@ -92,22 +82,24 @@ export default {
           data: { name: this.name, email: this.email, password: this.password }
         })
           .then(data => {
-            this.notice = "Registration successful. You can enjoy the the web's full feature now by logging in."
-            this.noticeColor = 'green'
-            this.isregistering = false
-            this.loginColor = 'orange'
-            this.registerColor = 'black'
+            this.$store.commit('updateNotice', "Registration successful. You can enjoy the the web's full feature now by logging in.")
+            this.$store.commit('updateNoticeColor', 'green')
+            this.$store.commit('isRegisteringFalse')
+            this.$store.commit('updateLoginColor', this.defaultColor)
+            this.$store.commit('updateRegisterColor', 'black')
+            this.$store.commit('updateName', '')
+            this.$store.commit('updatePassword', '')
           })
           .catch(err => {
-            this.notice = err.response.data.message
-            this.noticeColor = 'red'
+            this.$store.commit('updateNotice', err.response.data.message)
+            this.$store.commit('updateNoticeColor', 'red')
           })
       } else {
-        this.isregistering = true
-        this.noticeColor = 'white'
-        this.notice = 'placeholder'
-        this.loginColor = 'black'
-        this.registerColor = 'orange'
+        this.$store.commit('isRegisteringTrue')
+        this.$store.commit('updateNoticeColor', 'white')
+        this.$store.commit('updateNotice', 'placeholder')
+        this.$store.commit('updateLoginColor', 'black')
+        this.$store.commit('updateRegisterColor', this.defaultColor)
       }
     }
   },
@@ -117,8 +109,30 @@ export default {
     }
   },
   computed: {
-    islogin () {
-      return this.$store.state.islogin
+    ...mapState(['islogin', 'notice', 'noticeColor', 'isregistering', 'loginColor', 'registerColor', 'defaultColor']),
+    name: {
+      get () {
+        return this.$store.state.name
+      },
+      set (value) {
+        this.$store.commit('updateName', value)
+      }
+    },
+    email: {
+      get () {
+        return this.$store.state.email
+      },
+      set (value) {
+        this.$store.commit('updateEmail', value)
+      }
+    },
+    password: {
+      get () {
+        return this.$store.state.password
+      },
+      set (value) {
+        this.$store.commit('updatePassword', value)
+      }
     }
   }
 }
@@ -140,8 +154,5 @@ export default {
   }
   .logBtn:hover {
     background-color: rgba(211,211,211,0.3);
-  }
-  #logOutBtn:hover {
-    color:orange;
   }
 </style>

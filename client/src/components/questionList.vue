@@ -1,20 +1,37 @@
 <template>
   <div>
     <div class="row" v-if='showAll'>
-      <div class="card col-12" v-for='(question, index) in questions' v-bind:key='index'>
-        <div v-if='loggedInUser === question.asker._id'>
-          <button class='iconBtn' v-on:click='removeModal(question._id)'><i class="fas fa-trash-alt"></i></button>
-          <button class='iconBtn' v-on:click='editModal(question._id, question.title, question.content)'><i class="fas fa-edit"></i></button>
+      <div id='qBoxHead' v-bind:style='{background: defaultColor}' class="col-12">
+        <div class="row pt-1">
+          <div class="col-8">
+            <h5>Questions</h5>
+          </div>
+          <div class="col-1" title='Vote'>
+            <i class="fas fa-poll"></i>
+          </div>
+          <div class="col-1" title='Answer'>
+            <i class="fas fa-comments"></i>
+          </div>
         </div>
-        <div v-else>
-            <div id='cardTopSpace'></div>
-        </div>
-        <div class="card-body">
-          <router-link class="card-title" :to="{name: 'questionpage', params: {id:`${question._id}`}}">{{ question.title }}</router-link>
-          <p class="card-text mb-4">
-            asked by {{ question.asker.name }} on {{ question.createdAt | dateSlice }}<br>
-            vote: {{ question.vote }} | answer: {{ question.answer.length }}
-          </p>
+      </div>
+      <div id='questions' class="col-12 border-bottom" v-for='(question, index) in questions' v-bind:key='index'>
+        <div id='question' class="row">
+          <div class="col-8 text-left">
+            <router-link :to="{name: 'questionpage', params: {id:`${question._id}`}}">{{ question.title }}</router-link>
+            <p>asked by {{ question.asker.name }} on {{ question.createdAt | dateSlice }}</p>
+          </div>
+          <div class="col-1">
+            <div id='qVote'>{{ question.vote }}</div>
+          </div>
+          <div class="col-1">
+            <div id='qAnswer'>{{ question.answer.length }}</div>
+          </div>
+          <div class="col-2">
+            <div id='qOpt' v-if='loggedInUser === question.asker._id'>
+              <button class='iconBtn' v-on:click='removeModal(question._id)'><i class="fas fa-trash-alt"></i></button>
+              <button class='iconBtn' v-on:click='editModal(question._id, question.title, question.content)'><i class="fas fa-edit"></i></button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -29,12 +46,12 @@
             <div class="col-2">
               <div class="row mb-4">
                 <div class="col-12"><h6><strong>VOTE</strong></h6></div>
-                <button class="col-12 voteBtn haventVote" v-if='islogin && detailed.upvote.indexOf(loggedInUser) === -1 && detailed.asker._id !== loggedInUser' v-on:click='qUpvote()'><i class="fas fa-caret-up"></i></button>
-                <button class="col-12 voteBtn" v-else-if='islogin && detailed.asker._id !== loggedInUser' v-on:click='qUpvote()'><i class="fas fa-caret-up"></i></button>
+                <button v-bind:style='{color: defaultColor}' class="col-12 voteBtn haventVote" v-if='islogin && detailed.upvote.indexOf(loggedInUser) === -1 && detailed.asker._id !== loggedInUser' v-on:click='qUpvote()'><i class="fas fa-caret-up"></i></button>
+                <button v-bind:style='{color: defaultColor}' class="col-12 voteBtn" v-else-if='islogin && detailed.asker._id !== loggedInUser' v-on:click='qUpvote()'><i class="fas fa-caret-up"></i></button>
                 <div class="col-12 unselectable votePh" v-else>.</div>
                 <div class="col-12">{{ detailed.vote }}</div>
-                <button class="col-12 voteBtn haventVote" v-if='islogin && detailed.downvote.indexOf(loggedInUser) === -1 && detailed.asker._id !== loggedInUser' v-on:click='qDownvote()'><i class="fas fa-caret-down"></i></button>
-                <button class="col-12 voteBtn" v-else-if='islogin && detailed.asker._id !== loggedInUser' v-on:click='qDownvote()'><i class="fas fa-caret-down"></i></button>
+                <button v-bind:style='{color: defaultColor}' class="col-12 voteBtn haventVote" v-if='islogin && detailed.downvote.indexOf(loggedInUser) === -1 && detailed.asker._id !== loggedInUser' v-on:click='qDownvote()'><i class="fas fa-caret-down"></i></button>
+                <button v-bind:style='{color: defaultColor}' class="col-12 voteBtn" v-else-if='islogin && detailed.asker._id !== loggedInUser' v-on:click='qDownvote()'><i class="fas fa-caret-down"></i></button>
                 <div class="col-12 unselectable votePh" v-else>.</div>
               </div>
             </div>
@@ -51,7 +68,7 @@
           <div id='answerbox' v-if='islogin'>
             <h5><strong>Add your answer here</strong></h5>
             <textarea rows=2 v-model='newanswer' placeholder="Write some words"></textarea>
-            <button v-on:click='addAnswer()'>Add answer</button>
+            <button v-on:click='addAnswer()' v-bind:style='{background: defaultColor}'>Add answer</button>
           </div>
           <div class='border-bottom' id='answers' v-if='detailed.answer.length > 0'>
             <h5><strong>Answers</strong></h5>
@@ -304,7 +321,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['questions', 'detailed', 'showAll', 'islogin', 'loggedInUser', 'openEdit', 'openRemove', 'openEditAnswer']),
+    ...mapState(['questions', 'detailed', 'showAll', 'islogin', 'loggedInUser', 'openEdit', 'openRemove', 'openEditAnswer', 'defaultColor']),
     questiontitle: {
       get () {
         return this.$store.state.questiontitle
@@ -366,8 +383,20 @@ export default {
 </script>
 
 <style>
-  #cardTopSpace {
-    height: 40px;
+  #qBoxHead {
+    color: white;
+  }
+  #question {
+    padding: 20px 10px;
+  }
+  #question p {
+    margin: 0;
+  }
+  #qVote, #qAnswer {
+    margin: 12px 0px;
+  }
+  #qOpt button {
+    margin: 9px 0px;
   }
   #detailed {
     margin-top: 40px;
@@ -415,15 +444,11 @@ export default {
   }
   #answerbox button {
     color: white;
-    background-color: orange;
     font-weight: bold;
   }
   #answerbox h5 {
     text-align: left;
     margin-left: 10px;
-  }
-  #answerbox h5:hover {
-    color: orange
   }
   #answerbox textarea{
     width: 98%;
@@ -452,7 +477,6 @@ export default {
   }
   .voteBtn {
     background-color: white;
-    color: orange;
   }
   .haventVote {
     color: black;

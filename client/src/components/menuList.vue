@@ -1,7 +1,7 @@
 <template>
   <div id='menulist'>
     <div v-if='islogin'>
-      <button id='toggleModal' v-on:click='toggleModal()' title="Post A Question"><strong>Post A Question</strong></button><br><br>
+      <button id='toggleModal' v-bind:style='{background: defaultColor}' v-on:click='toggleModal()' title="Post A Question"><strong>Post A Question</strong></button><br><br>
       <div v-if='openModal'>
         <div id='backdrop'></div>
         <div id='addQuestion'>
@@ -31,17 +31,17 @@ export default {
   store,
   methods: {
     mostVotedQ: function () {
-      this.$store.dispatch('mostVotedQ')
+      this.$store.dispatch('mostVotedQ', this.defaultColor)
       localStorage.setItem('openTab', 'mostVotedQ')
       this.$router.push({ path: '/' })
     },
     mostRecentQ: function () {
-      this.$store.dispatch('mostRecentQ')
+      this.$store.dispatch('mostRecentQ', this.defaultColor)
       localStorage.setItem('openTab', 'mostRecentQ')
       this.$router.push({ path: '/' })
     },
     myQ: function () {
-      this.$store.dispatch('myQ')
+      this.$store.dispatch('myQ', this.defaultColor)
       localStorage.setItem('openTab', 'myQ')
       this.$router.push({ path: '/' })
     },
@@ -71,7 +71,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['islogin', 'byVote', 'byDate', 'mine', 'openModal']),
+    ...mapState(['islogin', 'byVote', 'byDate', 'mine', 'openModal', 'defaultColor']),
     questiontitle: {
       get () {
         return this.$store.state.questiontitle
@@ -103,20 +103,19 @@ export default {
 
 <style>
   .menubtn {
-        position: absolute;
-        right: 5%;
-        border: none;
-        background-color: white;
-        cursor: pointer;
-        font-weight: bold;
-    }
+    position: absolute;
+    right: 5%;
+    border: none;
+    background-color: white;
+    cursor: pointer;
+    font-weight: bold;
+  }
   .menubtn:hover {
     background-color: rgba(211,211,211,0.3);
   }
   #toggleModal {
     margin: 1vh 0;
     border: none;
-    background-color: orange;
     color: white;
     height: 50px;
     width: 100%;

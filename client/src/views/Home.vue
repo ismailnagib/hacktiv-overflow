@@ -2,7 +2,7 @@
   <div class="home">
     <div class="container">
       <div class="row">
-        <div class="col-12 col-md-3 border-right">
+        <div id='menulist' class="col-12 col-md-3 border-right">
           <menulist></menulist>
         </div>
         <div class="col-12 col-md-1"></div>
@@ -30,6 +30,9 @@ export default {
 <style>
   .home {
     margin-top: 12vh;
+  }
+  .home #menulist {
+    height: 30vh;
   }
   #backdrop {
     position: fixed;

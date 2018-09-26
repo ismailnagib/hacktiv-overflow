@@ -46,11 +46,11 @@
             <div class="col-2">
               <div class="row mb-4">
                 <div class="col-12"><h6><strong>VOTE</strong></h6></div>
-                <button v-bind:style='{color: defaultColor}' class="col-12 voteBtn haventVote" v-if='islogin && detailed.upvote.indexOf(loggedInUser) === -1 && detailed.asker._id !== loggedInUser' v-on:click='qUpvote()'><i class="fas fa-caret-up"></i></button>
+                <button class="col-12 voteBtn" v-if='islogin && detailed.upvote.indexOf(loggedInUser) === -1 && detailed.asker._id !== loggedInUser' v-on:click='qUpvote()'><i class="fas fa-caret-up"></i></button>
                 <button v-bind:style='{color: defaultColor}' class="col-12 voteBtn" v-else-if='islogin && detailed.asker._id !== loggedInUser' v-on:click='qUpvote()'><i class="fas fa-caret-up"></i></button>
                 <div class="col-12 unselectable votePh" v-else>.</div>
                 <div class="col-12">{{ detailed.vote }}</div>
-                <button v-bind:style='{color: defaultColor}' class="col-12 voteBtn haventVote" v-if='islogin && detailed.downvote.indexOf(loggedInUser) === -1 && detailed.asker._id !== loggedInUser' v-on:click='qDownvote()'><i class="fas fa-caret-down"></i></button>
+                <button class="col-12 voteBtn" v-if='islogin && detailed.downvote.indexOf(loggedInUser) === -1 && detailed.asker._id !== loggedInUser' v-on:click='qDownvote()'><i class="fas fa-caret-down"></i></button>
                 <button v-bind:style='{color: defaultColor}' class="col-12 voteBtn" v-else-if='islogin && detailed.asker._id !== loggedInUser' v-on:click='qDownvote()'><i class="fas fa-caret-down"></i></button>
                 <div class="col-12 unselectable votePh" v-else>.</div>
               </div>
@@ -75,12 +75,12 @@
             <div v-for="answer in detailed.answer" :key='answer._id' class="border-top pt-2">
               <div class="row">
                 <div class="col-2">
-                  <button class="col-12 voteBtn haventVote" v-if='islogin && answer.upvote.indexOf(loggedInUser) === -1 && answer.giver._id !== loggedInUser' v-on:click='aUpvote(answer._id)'><i class="fas fa-caret-up"></i></button>
-                  <button class="col-12 voteBtn" v-else-if='islogin && answer.giver._id !== loggedInUser' v-on:click='aUpvote(answer._id)'><i class="fas fa-caret-up"></i></button>
+                  <button class="col-12 voteBtn" v-if='islogin && answer.upvote.indexOf(loggedInUser) === -1 && answer.giver._id !== loggedInUser' v-on:click='aUpvote(answer._id)'><i class="fas fa-caret-up"></i></button>
+                  <button v-bind:style='{color: defaultColor}' class="col-12 voteBtn" v-else-if='islogin && answer.giver._id !== loggedInUser' v-on:click='aUpvote(answer._id)'><i class="fas fa-caret-up"></i></button>
                   <div class="col-12 unselectable votePh" v-else>.</div>
                   <div class="col-12" id='answerVote'>{{ answer.vote }}</div>
-                  <button class="col-12 voteBtn haventVote" v-if='islogin && answer.downvote.indexOf(loggedInUser) === -1 && answer.giver._id !== loggedInUser' v-on:click='aDownvote(answer._id)'><i class="fas fa-caret-down"></i></button>
-                  <button class="col-12 voteBtn" v-else-if='islogin && answer.giver._id !== loggedInUser' v-on:click='aDownvote(answer._id)'><i class="fas fa-caret-down"></i></button>
+                  <button class="col-12 voteBtn" v-if='islogin && answer.downvote.indexOf(loggedInUser) === -1 && answer.giver._id !== loggedInUser' v-on:click='aDownvote(answer._id)'><i class="fas fa-caret-down"></i></button>
+                  <button v-bind:style='{color: defaultColor}' class="col-12 voteBtn" v-else-if='islogin && answer.giver._id !== loggedInUser' v-on:click='aDownvote(answer._id)'><i class="fas fa-caret-down"></i></button>
                   <div class="col-12 unselectable votePh" v-else>.</div>
                 </div>
                 <div class="col-9 border-left">
@@ -477,9 +477,6 @@ export default {
   }
   .voteBtn {
     background-color: white;
-  }
-  .haventVote {
-    color: black;
   }
   .votePh {
     height: 40px;

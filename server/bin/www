@@ -7,31 +7,25 @@
 var app = require('../app');
 var debug = require('debug')('server:server');
 var http = require('http');
-var https = require('https');
-const path = require('path')
-const fs = require('fs')
 
-const privateKey = fs.readFileSync('/etc/letsencrypt/live/hackover-server.ismailnagib.xyz-0001/privkey.pem', 'utf8');
-const certificate = fs.readFileSync('/etc/letsencrypt/live/hackover-server.ismailnagib.xyz-0001/fullchain.pem', 'utf8');
-const ca = fs.readFileSync('/etc/letsencrypt/live/hackover-server.ismailnagib.xyz-0001/chain.pem', 'utf8');
+/**
+ * Get port from environment and store in Express.
+ */
 
-const credentials = {
-	key: privateKey,
-	cert: certificate,
-	ca: ca
-};
+var port = normalizePort(process.env.PORT || '3000');
+app.set('port', port);
 
-const httpServer = http.createServer(app);
-const httpsServer = https.createServer(credentials, app);
+/**
+ * Create HTTP server.
+ */
 
-httpServer.listen(80, () => {
-	console.log('HTTP Server running on port 80');
-});
+var server = http.createServer(app);
 
-httpsServer.listen(443, () => {
-	console.log('HTTPS Server running on port 443');
-});
+/**
+ * Listen on provided port, on all network interfaces.
+ */
 
+server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
 

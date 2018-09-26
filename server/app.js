@@ -11,7 +11,7 @@ const queue = kue.createQueue();
 const nodemailer = require('nodemailer');
 
 const mongoose = require('mongoose');
-mongoose.connect(`mongodb://localhost:27017/hacktiv-overflow`, { useNewUrlParser: true });
+mongoose.connect(`mongodb://hackover:${process.env.MLAB_PASSWORD}@ds115193.mlab.com:15193/hackover-db`, { useNewUrlParser: true });
 
 const usersRouter = require('./routes/users');
 const questionsRouter = require('./routes/questions');

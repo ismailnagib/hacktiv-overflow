@@ -169,7 +169,7 @@ export default {
       if (this.questiontitle.length > 0 && this.questiondesc.length > 0) {
         axios({
           method: 'put',
-          url: 'http://localhost:3000/questions/',
+          url: 'http://hackover-server.ismailnagib.xyz/questions/',
           data: { id: this.editId, token: localStorage.getItem('jwtToken'), title: this.questiontitle, content: this.questiondesc }
         })
           .then(data => {
@@ -200,7 +200,7 @@ export default {
     removeQuestion: function () {
       axios({
         method: 'delete',
-        url: 'http://localhost:3000/questions/',
+        url: 'http://hackover-server.ismailnagib.xyz/questions/',
         data: { id: this.removeId, token: localStorage.getItem('jwtToken') }
       })
         .then(data => {
@@ -215,7 +215,7 @@ export default {
     addAnswer: function () {
       axios({
         method: 'post',
-        url: 'http://localhost:3000/answers/',
+        url: 'http://hackover-server.ismailnagib.xyz/answers/',
         data: { questionId: this.detailed._id, content: this.newanswer, token: localStorage.getItem('jwtToken') }
       })
         .then(data => {
@@ -241,7 +241,7 @@ export default {
       if (this.editanswer.length > 0) {
         axios({
           method: 'put',
-          url: 'http://localhost:3000/answers/',
+          url: 'http://hackover-server.ismailnagib.xyz/answers/',
           data: { id: this.editAnswerId, content: this.editanswer, token: localStorage.getItem('jwtToken') }
         })
           .then(data => {
@@ -257,7 +257,7 @@ export default {
     qUpvote: function () {
       axios({
         method: 'put',
-        url: 'http://localhost:3000/questions/upvote',
+        url: 'http://hackover-server.ismailnagib.xyz/questions/upvote',
         data: { id: this.detailed._id, token: localStorage.getItem('jwtToken') }
       })
         .then(data => {
@@ -270,7 +270,7 @@ export default {
     qDownvote: function () {
       axios({
         method: 'put',
-        url: 'http://localhost:3000/questions/downvote',
+        url: 'http://hackover-server.ismailnagib.xyz/questions/downvote',
         data: { id: this.detailed._id, token: localStorage.getItem('jwtToken') }
       })
         .then(data => {
@@ -283,7 +283,7 @@ export default {
     aUpvote: function (id) {
       axios({
         method: 'put',
-        url: 'http://localhost:3000/answers/upvote',
+        url: 'http://hackover-server.ismailnagib.xyz/answers/upvote',
         data: { id: id, token: localStorage.getItem('jwtToken') }
       })
         .then(data => {
@@ -296,7 +296,7 @@ export default {
     aDownvote: function (id) {
       axios({
         method: 'put',
-        url: 'http://localhost:3000/answers/downvote',
+        url: 'http://hackover-server.ismailnagib.xyz/answers/downvote',
         data: { id: id, token: localStorage.getItem('jwtToken') }
       })
         .then(data => {

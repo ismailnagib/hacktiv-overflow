@@ -67,7 +67,7 @@ export default {
     addQuestion: function () {
       axios({
         method: 'post',
-        url: 'http://localhost:3000/questions',
+        url: 'http://hackover-server.ismailnagib.xyz/questions',
         data: { title: this.questiontitle, content: this.questiondesc, token: localStorage.getItem('jwtToken') }
       })
         .then(data => {

@@ -22,6 +22,8 @@ export default new Vuex.Store({
     openEditAnswer: false,
     editAnswerId: '',
     defaultColor: 'orange',
+    chosencolor: '',
+    openChangeColor: false,
     byVote: 'orange',
     byDate: 'black',
     mine: 'black',
@@ -87,6 +89,12 @@ export default new Vuex.Store({
     openModalFalse (state) {
       state.openModal = false
     },
+    openChangeColorTrue (state) {
+      state.openChangeColor = true
+    },
+    openChangeColorFalse (state) {
+      state.openChangeColor = false
+    },
     updateNotice (state, value) {
       state.notice = value
     },
@@ -143,6 +151,12 @@ export default new Vuex.Store({
     },
     updatePassword (state, value) {
       state.password = value
+    },
+    changeDefaultColor (state, value) {
+      state.defaultColor = value
+    },
+    changeChosenColor (state, value) {
+      state.chosencolor = value
     }
   },
   actions: {

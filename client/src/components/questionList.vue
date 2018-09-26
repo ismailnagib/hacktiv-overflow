@@ -28,8 +28,8 @@
           </div>
           <div class="col-2">
             <div id='qOpt' v-if='loggedInUser === question.asker._id'>
-              <button class='iconBtn' v-on:click='removeModal(question._id)'><i class="fas fa-trash-alt"></i></button>
-              <button class='iconBtn' v-on:click='editModal(question._id, question.title, question.content)'><i class="fas fa-edit"></i></button>
+              <button class='iconBtn' v-bind:style='{color: defaultColor}' v-on:click='removeModal(question._id)'><i class="fas fa-trash-alt"></i></button>
+              <button class='iconBtn' v-bind:style='{color: defaultColor}' v-on:click='editModal(question._id, question.title, question.content)'><i class="fas fa-edit"></i></button>
             </div>
           </div>
         </div>
@@ -38,8 +38,8 @@
     <div class='row' v-else>
       <div class="col-12">
         <div v-if='loggedInUser === detailed.asker._id'>
-          <button class='iconBtn' v-on:click='removeModal(detailed._id, "detailed")'><i class="fas fa-trash-alt"></i></button>
-          <button class='iconBtn' v-on:click='editModal(detailed._id, detailed.title, detailed.content)'><i class="fas fa-edit"></i></button>
+          <button class='iconBtn' v-bind:style='{color: defaultColor}' v-on:click='removeModal(detailed._id, "detailed")'><i class="fas fa-trash-alt"></i></button>
+          <button class='iconBtn' v-bind:style='{color: defaultColor}' v-on:click='editModal(detailed._id, detailed.title, detailed.content)'><i class="fas fa-edit"></i></button>
         </div>
         <div id="detailed">
           <div class="row mb-4">
@@ -88,7 +88,7 @@
                   <p id='answer'>{{ answer.content }}</p>
                 </div>
                 <div class="col-1">
-                  <button class="iconBtn" v-if='loggedInUser === answer.giver._id' v-on:click='editAnswerModal(answer._id, answer.content)'><i class="fas fa-edit"></i></button>
+                  <button class="iconBtn" v-bind:style='{color: defaultColor}' v-if='loggedInUser === answer.giver._id' v-on:click='editAnswerModal(answer._id, answer.content)'><i class="fas fa-edit"></i></button>
                 </div>
               </div>
             </div>
@@ -104,36 +104,36 @@
     <div v-if='openEdit'>
       <div id='backdrop'></div>
       <div id='editQuestion'>
-        <button class="iconBtn closeModal" v-on:click="editModal()" title='Close'><i class="far fa-times-circle"></i></button><br>
+        <button class="iconBtn closeModal" v-bind:style='{color: defaultColor}' v-on:click="editModal()" title='Close'><i class="far fa-times-circle"></i></button><br>
         <div id='editQuestionInput'>
           <input v-model='questiontitle' type="text" placeholder="Question">
           <textarea rows=5 v-model='questiondesc' placeholder="Description"></textarea>
         </div>
-        <button class='modalBtn' v-on:click="editModal()">Cancel Edit</button>
-        <button class='modalBtn' v-on:click="editQuestion()">Commit Edit</button><br>
+        <button class='modalBtn' v-bind:style='{background: defaultColor}' v-on:click="editModal()">Cancel Edit</button>
+        <button class='modalBtn' v-bind:style='{background: defaultColor}' v-on:click="editQuestion()">Commit Edit</button><br>
       </div>
     </div>
 
     <div v-if='openRemove'>
       <div id='backdrop'></div>
       <div class='removeConfirmation'>
-        <button class="iconBtn closeModal" v-on:click="removeModal()" title='Close'><i class="far fa-times-circle"></i></button><br>
+        <button class="iconBtn closeModal" v-bind:style='{color: defaultColor}' v-on:click="removeModal()" title='Close'><i class="far fa-times-circle"></i></button><br>
         <h3>Are you sure?</h3>
         <h5>You're about to delete the question permanently</h5>
-        <button class='modalBtn' v-on:click="removeModal()">Nope</button>
-        <button class='modalBtn' v-on:click="removeQuestion()">Yeah</button><br>
+        <button class='modalBtn' v-bind:style='{background: defaultColor}' v-on:click="removeModal()">Nope</button>
+        <button class='modalBtn' v-bind:style='{background: defaultColor}' v-on:click="removeQuestion()">Yeah</button><br>
       </div>
     </div>
 
     <div v-if='openEditAnswer'>
       <div id='backdrop'></div>
       <div id='editAnswer'>
-        <button class="iconBtn closeModal" v-on:click="editAnswerModal()" title='Close'><i class="far fa-times-circle"></i></button><br>
+        <button class="iconBtn closeModal" v-bind:style='{color: defaultColor}' v-on:click="editAnswerModal()" title='Close'><i class="far fa-times-circle"></i></button><br>
         <div id='editAnswerInput'>
           <textarea rows=2 v-model='editanswer' placeholder="Write some words"></textarea>
         </div>
-        <button class='modalBtn' v-on:click="editAnswerModal()">Cancel Edit</button>
-        <button class='modalBtn' v-on:click="editAnswer()">Commit Edit</button><br>
+        <button class='modalBtn' v-bind:style='{background: defaultColor}' v-on:click="editAnswerModal()">Cancel Edit</button>
+        <button class='modalBtn' v-bind:style='{background: defaultColor}' v-on:click="editAnswer()">Commit Edit</button><br>
       </div>
     </div>
   </div>

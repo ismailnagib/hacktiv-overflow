@@ -5,13 +5,13 @@
       <div v-if='openModal'>
         <div id='backdrop'></div>
         <div id='addQuestion'>
-          <button class='iconBtn closeModal' v-on:click="toggleModal()" title='Close'><i class="far fa-times-circle"></i></button><br>
+          <button class='iconBtn closeModal' v-bind:style='{color: defaultColor}' v-on:click="toggleModal()" title='Close'><i class="far fa-times-circle"></i></button><br>
           <div id='addQuestionInput'>
             <input v-model='questiontitle' type="text" placeholder="Question">
             <textarea rows=5 v-model='questiondesc' placeholder="Description"></textarea>
           </div>
-          <button class='modalBtn' v-on:click="toggleModal()">Maybe Later</button>
-          <button class='modalBtn' v-on:click="addQuestion()">Post It</button><br>
+          <button class='modalBtn' v-bind:style='{background: defaultColor}' v-on:click="toggleModal()">Maybe Later</button>
+          <button class='modalBtn' v-bind:style='{background: defaultColor}' v-on:click="addQuestion()">Post It</button><br>
         </div>
       </div>
     </div>
@@ -32,17 +32,29 @@ export default {
   methods: {
     mostVotedQ: function () {
       this.$store.dispatch('mostVotedQ', this.defaultColor)
-      localStorage.setItem('openTab', 'mostVotedQ')
+      let ls = {
+        defaultColor: this.defaultColor,
+        openTab: 'mostVotedQ'
+      }
+      localStorage.setItem('hacktiv_overflow_data', JSON.stringify(ls))
       this.$router.push({ path: '/' })
     },
     mostRecentQ: function () {
       this.$store.dispatch('mostRecentQ', this.defaultColor)
-      localStorage.setItem('openTab', 'mostRecentQ')
+      let ls = {
+        defaultColor: this.defaultColor,
+        openTab: 'mostRecentQ'
+      }
+      localStorage.setItem('hacktiv_overflow_data', JSON.stringify(ls))
       this.$router.push({ path: '/' })
     },
     myQ: function () {
       this.$store.dispatch('myQ', this.defaultColor)
-      localStorage.setItem('openTab', 'myQ')
+      let ls = {
+        defaultColor: this.defaultColor,
+        openTab: 'myQ'
+      }
+      localStorage.setItem('hacktiv_overflow_data', JSON.stringify(ls))
       this.$router.push({ path: '/' })
     },
     toggleModal: function () {
@@ -92,8 +104,8 @@ export default {
   created () {
     if (this.$route.params.id) {
       this.$store.dispatch('showOne', this.$route.params.id)
-    } else if (localStorage.getItem('openTab')) {
-      this[localStorage.getItem('openTab')]()
+    } else if (localStorage.getItem('hacktiv_overflow_data')) {
+      this[JSON.parse(localStorage.getItem('hacktiv_overflow_data')).openTab]()
     } else {
       this.mostVotedQ()
     }
@@ -148,7 +160,6 @@ export default {
     height: 50px;
     font-size: 20px;
     padding: 10px 20px;
-    background-color: orange;
     color: white;
     margin: 20px 10px;
     border-radius: 25px;

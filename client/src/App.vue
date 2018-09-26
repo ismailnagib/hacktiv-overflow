@@ -1,7 +1,8 @@
 <template>
   <div id="app">
     <div id="nav" class="border-bottom fixed-top row">
-      <router-link id='brand' to="/" class="col-3">hacktiv<span v-bind:style='{color: defaultColor}'>overflow</span></router-link>
+      <div id='brushBtn' class="col-1"><colorchanger></colorchanger></div>
+      <router-link id='brand' to="/" class="col-2">hacktiv<span v-bind:style='{color: defaultColor}'>overflow</span></router-link>
       <loginform id='loginform' class="col-9"></loginform>
     </div>
     <router-view/>
@@ -10,12 +11,14 @@
 
 <script>
 import loginform from '@/components/loginForm.vue'
+import colorchanger from '@/components/colorChanger.vue'
 import { mapState } from 'vuex'
 
 export default {
   name: 'app',
   components: {
-    loginform
+    loginform,
+    colorchanger
   },
   computed: {
     ...mapState(['defaultColor'])
@@ -32,7 +35,7 @@ export default {
   color: #2c3e50;
 }
 #brand {
-  padding: 20px 0px 20px 10%;
+  padding: 20px 0px 20px 0;
   text-align: left;
   font-size: 30px;
 }
@@ -47,7 +50,7 @@ export default {
 }
 #loginform {
   text-align: right;
-  right: 10%
+  right: 5%;
 }
 button {
   border: none;
@@ -78,5 +81,12 @@ textarea:focus, input:focus, button:focus {
   -ms-user-select: none;
   user-select: none;
   color: white;
+}
+#app #brushBtn {
+  padding: 25px 0px 20px 0px;
+  text-align: right;
+}
+#app #brushBtn button {
+  background-color: white;
 }
 </style>

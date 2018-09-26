@@ -35,7 +35,7 @@ new CronJob('00 * * * * *', function() {
             service: 'gmail',
             auth: {
                 user: 'backgroundjobtest@gmail.com',
-                pass: 'J6MQN5ILhIs#'
+                pass: process.env.EMAIL_PASSWORD
             }
         })
         let mailOptions = {

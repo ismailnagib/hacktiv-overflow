@@ -14,8 +14,9 @@
           <br>
           <input v-on:click='changeColor()' type="radio" id="blue" value="Blue" v-model="chosencolor">
           <label for="blue">Blue</label>
-          <br>
-          <input v-on:keyup='changeColor()' v-bind:style='{color: defaultColor}' type="text" value="" placeholder='Choose your own color' v-model="chosencolor">
+          <br><br>
+          <label id='yourOwnLabel' for="yourOwn">Choose from the colors above or write your own below (use valid color name / hex color code)</label>
+          <input v-on:keyup='changeColor()' v-bind:style='{color: defaultColor}' type="text" id='yourOwn' value="" placeholder='Choose your own color' v-model="chosencolor">
         </div>
       </div>
     </div>
@@ -100,9 +101,9 @@ export default {
     text-align: left;
     font-size: 25px;
     left: 45%;
-    top: 35%;
+    top: 30%;
     width: 20%;
-    height: 30%;
+    height: 40%;
     z-index: 2001;
   }
   #colorchoiceinput input {
@@ -114,5 +115,9 @@ export default {
   }
   #colorchoiceinput label {
     margin-left: 5%;
+  }
+  #yourOwnLabel {
+    font-size: 14px;
+    text-align: center;
   }
 </style>

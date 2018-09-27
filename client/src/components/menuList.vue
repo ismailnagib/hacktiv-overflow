@@ -31,7 +31,11 @@ export default {
   store,
   methods: {
     mostVotedQ: function () {
-      this.$store.dispatch('mostVotedQ', this.defaultColor)
+      if (this.firstLoad) {
+        this.$store.commit('notFirstLoad')
+      } else {
+        this.$store.dispatch('mostVotedQ', this.defaultColor)
+      }
       let ls = {
         defaultColor: this.defaultColor,
         openTab: 'mostVotedQ'
@@ -40,7 +44,11 @@ export default {
       this.$router.push({ path: '/' })
     },
     mostRecentQ: function () {
-      this.$store.dispatch('mostRecentQ', this.defaultColor)
+      if (this.firstLoad) {
+        this.$store.commit('notFirstLoad')
+      } else {
+        this.$store.dispatch('mostRecentQ', this.defaultColor)
+      }
       let ls = {
         defaultColor: this.defaultColor,
         openTab: 'mostRecentQ'
@@ -49,7 +57,11 @@ export default {
       this.$router.push({ path: '/' })
     },
     myQ: function () {
-      this.$store.dispatch('myQ', this.defaultColor)
+      if (this.firstLoad) {
+        this.$store.commit('notFirstLoad')
+      } else {
+        this.$store.dispatch('myQ', this.defaultColor)
+      }
       let ls = {
         defaultColor: this.defaultColor,
         openTab: 'myQ'
@@ -83,7 +95,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['islogin', 'byVote', 'byDate', 'mine', 'openModal', 'defaultColor']),
+    ...mapState(['islogin', 'byVote', 'byDate', 'mine', 'openModal', 'defaultColor', 'firstLoad']),
     questiontitle: {
       get () {
         return this.$store.state.questiontitle

@@ -35,7 +35,8 @@ export default new Vuex.Store({
     registerColor: 'black',
     name: '',
     email: '',
-    password: ''
+    password: '',
+    firstLoad: true
   },
   mutations: {
     login (state) {
@@ -112,6 +113,9 @@ export default new Vuex.Store({
     },
     isRegisteringFalse (state) {
       state.isregistering = false
+    },
+    notFirstLoad (state) {
+      state.firstLoad = false
     },
     updateQuestionTitle (state, value) {
       state.questiontitle = value

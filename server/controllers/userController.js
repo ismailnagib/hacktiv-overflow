@@ -1,6 +1,8 @@
 const User = require('../models/userModel')
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const kue = require('kue')
+const queue = kue.createQueue();
 
 module.exports = {
 
